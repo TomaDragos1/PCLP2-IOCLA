@@ -1,0 +1,416 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "structs.h"
+#include <inttypes.h>
+
+data_structure *alocare_data(char *line)
+{
+	line = strtok(NULL, " \n");
+	data_structure *crt_data = malloc(sizeof(data_structure));
+	crt_data->header = malloc(sizeof(head));
+	crt_data->data = NULL;
+	crt_data->header->len = 0;
+	crt_data->header->type = atoi(line);
+	line = strtok(NULL, " \n");
+	int lungime1 = strlen(line) + 1;
+	char *dedicator1 = (char *)malloc(sizeof(char) * lungime1);
+	strcpy(dedicator1, line);
+	dedicator1[strlen(dedicator1)] = '\0';
+	crt_data->data = malloc(lungime1);
+	memcpy(crt_data->data, dedicator1, lungime1);
+	crt_data->header->len += lungime1;
+	if (crt_data->header->type == 1)
+	{
+		crt_data->header->type = 1;
+		crt_data->data = realloc(crt_data->data, crt_data->header->len + sizeof(int8_t) + sizeof(int8_t));
+		int8_t suma1;
+		line = strtok(NULL, " \n");
+		suma1 = atoi(line);
+		int8_t suma2;
+		line = strtok(NULL, " \n");
+		suma2 = atoi(line);
+		memcpy(crt_data->data + crt_data->header->len, &suma1, sizeof(suma1));
+		crt_data->header->len += sizeof(suma1);
+		memcpy(crt_data->data + crt_data->header->len, &suma2, sizeof(suma2));
+		crt_data->header->len += sizeof(suma2);
+	}
+	if (crt_data->header->type == 2)
+	{
+		crt_data->header->type = 2;
+		crt_data->data = realloc(crt_data->data, crt_data->header->len + sizeof(int32_t) + sizeof(int16_t));
+		int16_t suma1;
+		line = strtok(NULL, " \n");
+		suma1 = atoi(line);
+		int32_t suma2;
+		line = strtok(NULL, " \n");
+		suma2 = atoi(line);
+		memcpy(crt_data->data + crt_data->header->len, &suma1, sizeof(suma1));
+		crt_data->header->len += sizeof(suma1);
+		memcpy(crt_data->data + crt_data->header->len, &suma2, sizeof(suma2));
+		crt_data->header->len += sizeof(suma2);
+	}
+	if (crt_data->header->type == 3)
+	{
+		crt_data->header->type = 3;
+		crt_data->data = realloc(crt_data->data, crt_data->header->len + sizeof(int32_t) + sizeof(int32_t));
+		int32_t suma1;
+		line = strtok(NULL, " \n");
+		suma1 = atoi(line);
+		int32_t suma2;
+		line = strtok(NULL, " \n");
+		suma2 = atoi(line);
+		memcpy(crt_data->data + crt_data->header->len, &suma1, sizeof(suma1));
+		crt_data->header->len += sizeof(suma1);
+		memcpy(crt_data->data + crt_data->header->len, &suma2, sizeof(suma2));
+		crt_data->header->len += sizeof(suma2);
+	}
+	line = strtok(NULL, " \n");
+	int lungime2 = strlen(line) + 1;
+	char *dedicator2 = (char *)malloc(sizeof(char) * lungime2);
+	crt_data->data = realloc(crt_data->data, crt_data->header->len + lungime2);
+	strcpy(dedicator2, line);
+	dedicator2[(strlen(dedicator2))] = '\0';
+	memcpy(crt_data->data + crt_data->header->len, dedicator2, lungime2);
+	crt_data->header->len += lungime2;
+	free(dedicator1);
+	free(dedicator2);
+	return crt_data;
+}
+// void print(void *arr, int len, data_structure *pars_data)
+// {
+// 	int parcurgere = 0;
+// 	while (parcurgere < len)
+// 	{
+// 		pars_data->header->len = 0;
+// 		pars_data->header->type = 0;
+// 		pars_data->data = NULL;
+// 		memcpy(pars_data->header, arr + parcurgere, sizeof(head));
+// 		char *dedicator1 = NULL;
+// 		int parcurgere1 = 0;
+// 		while (1)
+// 		{
+// 			dedicator1 = realloc(dedicator1, parcurgere1 + 1);
+// 			if (*(char *)(arr + parcurgere + sizeof(head)) != '\0')
+// 			{
+// 				dedicator1[parcurgere1] = *(char *)(arr + parcurgere + sizeof(head));
+// 				parcurgere++;
+// 				parcurgere1++;
+// 			}
+// 			else
+// 			{
+// 				dedicator1[parcurgere1] = '\0';
+// 				break;
+// 			}
+// 		}
+// 		parcurgere++;
+// 		int8_t suma1_caz_1 = 0;
+// 		int8_t suma2_caz_1 = 0;
+// 		int16_t suma1_caz_2 = 0;
+// 		int32_t suma2_caz_2 = 0;
+// 		int32_t suma1_caz_3 = 0;
+// 		int32_t suma2_caz_3 = 0;
+// 		if (pars_data->header->type == 1)
+// 		{
+// 			memcpy(&suma1_caz_1, arr + sizeof(head) + parcurgere, sizeof(int8_t));
+// 			parcurgere += sizeof(int8_t);
+// 			memcpy(&suma2_caz_1, arr + sizeof(head) + parcurgere, sizeof(int8_t));
+// 			parcurgere += sizeof(int8_t);
+// 		}
+// 		if (pars_data->header->type == 2)
+// 		{
+// 			memcpy(&suma1_caz_2, arr + sizeof(head) + parcurgere, sizeof(int16_t));
+// 			parcurgere += sizeof(int16_t);
+// 			memcpy(&suma2_caz_2, arr + sizeof(head) + parcurgere, sizeof(int32_t));
+// 			parcurgere += sizeof(int32_t);
+// 		}
+// 		if (pars_data->header->type == 3)
+// 		{
+// 			memcpy(&suma1_caz_3, arr + sizeof(head) + parcurgere, sizeof(int32_t));
+// 			parcurgere += sizeof(int32_t);
+// 			memcpy(&suma2_caz_3, arr + sizeof(head) + parcurgere, sizeof(int32_t));
+// 			parcurgere += sizeof(int32_t);
+// 		}
+// 		int parcurgere2 = 0;
+// 		char *dedicator2 = NULL;
+// 		while (1)
+// 		{
+// 			dedicator2 = realloc(dedicator2, parcurgere2 + 1);
+// 			if (*(char *)(arr + parcurgere + sizeof(head)) != '\0')
+// 			{
+// 				dedicator2[parcurgere2] = *(char *)(arr + parcurgere + sizeof(head));
+// 				parcurgere2++;
+// 				parcurgere++;
+// 			}
+// 			else
+// 			{
+// 				dedicator2[parcurgere2] = '\0';
+// 				break;
+// 			}
+// 		}
+// 		parcurgere++;
+// 		parcurgere = parcurgere + sizeof(head);
+// 		printf("Tipul %d\n", pars_data->header->type);
+// 		printf("%s pentru %s\n", dedicator1, dedicator2);
+// 		if (pars_data->header->type == 1)
+// 		{
+// 			printf("%"PRId8"\n", suma1_caz_1);
+// 			printf("%"PRId8"\n", suma2_caz_1);
+// 		}
+// 		if (pars_data->header->type == 2)
+// 		{
+// 			printf("%"PRId16"\n", suma1_caz_2);
+// 			printf("%"PRId32"\n", suma2_caz_2);
+// 		}
+// 		if (pars_data->header->type == 3)
+// 		{
+// 			printf("%"PRId32"\n", suma1_caz_3);
+// 			printf("%"PRId32"\n", suma2_caz_3);
+// 		}
+// 		printf("\n");
+// 		free(dedicator1);
+// 		free(dedicator2);
+// 	}
+// }
+
+void print(void *arr, int len, data_structure *pars_data)
+{
+	int parcurgere = 0;
+	while (parcurgere < len)
+	{
+		pars_data->header->len = 0;
+		pars_data->header->type = 0;
+		pars_data->data = NULL;
+		memcpy(pars_data->header, arr + parcurgere, sizeof(head));
+		int i;
+		int lungime1 = 0;
+		printf("Tipul %d\n", pars_data->header->type);
+		while(*(char *)(arr + parcurgere + sizeof(head) + lungime1) != '\0')
+		{
+			printf("%c", *(char *)(arr + parcurgere + sizeof(head) + lungime1));
+			lungime1 ++;
+		}
+		parcurgere = parcurgere + lungime1 + 1;
+		int suma = 0;
+		if(pars_data->header->type == 1)
+		{
+			suma = sizeof(int8_t) + sizeof(int8_t);
+			parcurgere = parcurgere + suma;
+		}
+		if(pars_data->header->type == 2)
+		{
+			suma = sizeof(int32_t) + sizeof(int16_t);
+			parcurgere = parcurgere + suma;
+		}
+		if(pars_data->header->type == 3)
+		{
+			suma = sizeof(int32_t) + sizeof(int32_t);
+			parcurgere = parcurgere + suma;
+		}
+		int lungime2 = 0;
+		printf(" pentru ");
+		while(*(char *)(arr + parcurgere + sizeof(head) + lungime2) != '\0')
+		{
+			printf("%c", *(char *)(arr + parcurgere + sizeof(head) + lungime2));
+			lungime2 ++;
+		}
+		printf("\n");
+		lungime2 ++;
+		parcurgere = parcurgere - suma;
+		if(pars_data->header->type == 1)
+		{
+			int8_t suma1;
+			int8_t suma2;
+			memcpy(&suma1, arr + parcurgere + sizeof(head), sizeof(int8_t));
+			parcurgere += sizeof(int8_t);
+			memcpy(&suma2, arr + parcurgere + sizeof(head), sizeof(int8_t));
+			parcurgere += sizeof(int8_t);
+			printf("%"PRId8"\n", suma1);
+ 			printf("%"PRId8"\n", suma2);
+		}
+		if(pars_data->header->type == 2)
+		{
+			int16_t suma1;
+			int32_t suma2;
+			memcpy(&suma1, arr + parcurgere + sizeof(head), sizeof(int16_t));
+			parcurgere += sizeof(int16_t);
+			memcpy(&suma2, arr + parcurgere + sizeof(head), sizeof(int32_t));
+			parcurgere += sizeof(int32_t);
+			printf("%"PRId16"\n", suma1);
+ 			printf("%"PRId32"\n", suma2);
+		}
+		if(pars_data->header->type == 3)
+		{
+			int32_t suma1;
+			int32_t suma2;
+			memcpy(&suma1, arr + parcurgere + sizeof(head), sizeof(int32_t));
+			parcurgere += sizeof(int32_t);
+			memcpy(&suma2, arr + parcurgere + sizeof(head), sizeof(int32_t));
+			parcurgere += sizeof(int32_t);
+			printf("%"PRId32"\n", suma1);
+ 			printf("%"PRId32"\n", suma2);
+		}
+		printf("\n");
+		parcurgere = parcurgere + sizeof(head) + lungime2;
+	}
+}
+
+int add_last(void **arr, int *len, data_structure *data)
+{
+	if ((*arr) == NULL)
+	{
+		(*arr) = malloc(data->header->len + sizeof(head));
+	}
+	else
+	{
+		(*arr) = realloc((*arr), (*len) + data->header->len + sizeof(head));
+	}
+	memmove((*arr) + (*len), data->header, sizeof(head));
+	(*len) = (*len) + sizeof(head);
+	memmove((*arr) + (*len), data->data, data->header->len);
+	(*len) = (*len) + data->header->len;
+}
+
+int add_at(void **arr, int *len, data_structure *data, int index)
+{
+	int contor = 0;
+	int lungime_dest = 0;
+	int lungime_fin = 0;
+	data_structure *parsare = malloc(sizeof(data_structure));
+	parsare->header = malloc(sizeof(head));
+	lungime_dest = data->header->len + sizeof(head);
+	while (1)
+	{	
+		if((lungime_fin < (*len)))
+		memmove(parsare->header, (*arr) + lungime_fin, sizeof(head));
+		if (contor == index || (lungime_fin >= (*len)))
+		{
+			(*arr) = realloc((*arr), (*len) + lungime_dest);
+			memmove((*arr) + lungime_fin + lungime_dest, (*arr) + lungime_fin, (*len) - lungime_fin);
+			memmove((*arr) + lungime_fin, data->header, sizeof(head));
+			memmove((*arr) + lungime_fin + sizeof(head), data->data, data->header->len);
+			(*len) = (*len) + sizeof(head) + data->header->len;
+			break;
+		}
+		lungime_fin += sizeof(head);
+		lungime_fin += parsare->header->len;
+		contor++;
+	}
+	free(parsare->header);
+	free(parsare);
+}
+
+void find(void *data_block, int len, int index)
+{
+	data_structure *parsare = malloc(sizeof(data_structure));
+	parsare->header = malloc(sizeof(head));
+	int contor = 0;
+	int lungime_crt = 0;
+	while (1)
+	{
+		if (lungime_crt >= (len))
+			break;
+		memcpy(parsare->header, (data_block) + lungime_crt, sizeof(head));
+		if (contor == index)
+		{
+			data_structure *parsare1 = malloc(sizeof(data_structure));
+			parsare1->header = malloc(sizeof(head));
+			print((data_block + lungime_crt), sizeof(head) + parsare->header->len, parsare1);
+			free(parsare1->header);
+			free(parsare1);
+			break;
+		}
+		lungime_crt += sizeof(head);
+		lungime_crt += parsare->header->len;
+		contor++;
+	}
+	free(parsare->header);
+	free(parsare);
+}
+
+int delete_at(void **arr, int *len, int index)
+{
+	data_structure *parsare = malloc(sizeof(data_structure));
+	parsare->header = malloc(sizeof(head));
+	int contor = 0;
+	int lungime_crt = 0;
+	while (1)
+	{
+		if (lungime_crt >= (*len))
+			break;
+		memcpy(parsare->header, (*arr) + lungime_crt, sizeof(head));
+		if (contor == index)
+		{
+			int distanta = sizeof(head) + parsare->header->len;
+			memmove((*arr) + lungime_crt, (*arr) + lungime_crt + distanta, (*len) - distanta - lungime_crt);
+			(*len) = (*len) - distanta;
+			(*arr) = realloc((*arr), (*len));
+			break;
+		}
+		lungime_crt += sizeof(head);
+		lungime_crt += parsare->header->len;
+		contor++;
+	}
+	free(parsare->header);
+	free(parsare);
+}
+
+int main()
+{
+	// the vector of bytes u have to work with
+	// good luck :)
+	void *arr = NULL;
+	int len = 0;
+	char *line = (char *)malloc(sizeof(char) * 256);
+	char *parsare;
+	while (fgets(line, 256, stdin))
+	{
+		parsare = strtok(line, " \n");
+		if (!strcmp(parsare, "insert"))
+		{
+			data_structure *crt_data;
+			crt_data = alocare_data(parsare);
+			add_last(&arr, &len, crt_data);
+			free(crt_data->header);
+			free(crt_data->data);
+			free(crt_data);
+		}
+		if (!strcmp(parsare, "insert_at"))
+		{
+			parsare = strtok(NULL, " \n");
+			int index = atoi(parsare);
+			data_structure *crt_data;
+			crt_data = alocare_data(parsare);
+			add_at(&arr, &len, crt_data, index);
+			free(crt_data->header);
+			free(crt_data->data);
+			free(crt_data);
+		}
+		if (!strcmp(parsare, "print"))
+		{
+			data_structure *pars_data = malloc(sizeof(data_structure));
+			pars_data->header = malloc(sizeof(head));
+			print(arr, len, pars_data);
+			free(pars_data->header);
+			free(pars_data);
+		}
+		if (!strcmp(parsare, "delete_at"))
+		{
+			parsare = strtok(NULL, " \n");
+			int index = atoi(parsare);
+			delete_at(&arr, &len, index);
+		}
+		if (!strcmp(parsare, "find"))
+		{
+			parsare = strtok(NULL, " \n");
+			int index = atoi(parsare);
+			find(arr, len, index);
+		}
+		if(!strcmp(parsare, "exit"))
+		{
+		free(arr);
+		}
+	}
+	free(line);
+	return 0;
+}

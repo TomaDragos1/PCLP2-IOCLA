@@ -1,0 +1,235 @@
+%include "../include/io.mac"
+
+section .text
+    global spiral
+    extern printf
+
+section .data
+    cont dd 0
+    np dd 0
+    line_down dd 0
+    line_up dd 0
+    col_left dd 0
+    col_right dd 0
+    i dd 0
+    j dd 0
+
+; void spiral(int N, char *plain, int key[N][N], char *enc_string);
+spiral:
+    ;; DO NOT MODIFY
+    push ebp
+    mov ebp, esp
+    pusha
+
+    mov eax, [ebp + 8]  ; N (size of key line)
+    mov ebx, [ebp + 12] ; plain (address of first element in string)
+    mov ecx, [ebp + 16] ; key (address of first element in matrix)
+    mov edx, [ebp + 20] ; enc_string (address of first element in string)
+    ;; DO NOT MODIFY
+    ;; TODO: Implement spiral encryption
+    ;; FREESTYLE STARTS HERE
+
+    mov esi, [ebp + 8]
+    dec esi
+    mov edi , 0
+    mov [cont], edi
+    mov [np], edi
+    mov [line_down], edi
+    mov [line_up], esi
+    mov [col_left], edi
+    mov [col_right], esi
+    mov [i], edi
+    mov [j], edi
+    mov eax , [ebp + 8]
+    mov ebx , eax
+    xor edx, edx
+    mul ebx
+    mov [np], eax
+
+for:
+    mov ebx , [col_left]
+    mov [i], ebx
+    line1:
+        mov esi , [i] ;i
+        mov edi , [col_right]
+        inc edi
+        cmp edi, esi
+        jz next1
+
+        mov edi , [ebp + 16]
+        mov ebx, [line_down] ;row 1
+        mov eax , [ebp + 8] ;n
+        xor edx, edx
+        mul ebx
+        add eax, esi
+        mov edx , [edi + 4 * eax] ; element matrix
+        mov edi , [ebp + 12]
+        mov ecx , [cont]
+        xor eax, eax
+        mov al , byte[edi + ecx]
+        add eax, edx
+        mov edi , [ebp + 20]
+        mov [edi + ecx], al ; adunat in sir
+
+        mov eax, [cont]
+        mov ebx, [i]
+        inc eax
+        inc ebx
+        mov [cont], eax
+        mov [i], ebx
+        jmp line1
+    
+next1:
+    mov ebx, [cont]
+    mov eax, [np]
+    cmp ebx, eax
+    jge end
+
+    mov ebx , [line_down]
+    inc ebx
+    mov [j], ebx
+
+    col1:
+        mov esi , [j] ;i
+        mov edi , [line_up]
+        inc edi
+        cmp edi , esi
+        jz next2
+
+        mov edi , [ebp + 16]
+        mov ebx, [j] ;row 1
+        mov eax , [ebp + 8] ;n
+        xor edx, edx
+        mul ebx
+        mov esi , [col_right] ; [edi + 4 *j * n + 4 * col_right]
+        add eax, esi
+        mov edx , [edi + 4 * eax] ; element matrix
+        mov edi , [ebp + 12]
+        mov ecx , [cont]
+        xor eax, eax
+        mov al , byte[edi + ecx] ; litera
+        add eax, edx
+        mov edi , [ebp + 20]
+        mov [edi + ecx], al ; adunat in sir
+
+        mov eax, [cont]
+        mov ebx, [j]
+        inc eax
+        inc ebx
+        mov [cont], eax
+        mov [j], ebx
+        mov ebx , [j]
+        jmp col1
+    
+next2:
+    mov ebx, [cont]
+    mov eax, [np]
+    cmp ebx, eax
+    jge end
+
+    mov ebx, [col_right]
+    dec ebx
+    jl end
+    mov [i], ebx
+    line2:
+        mov esi , [i]
+        mov edi , [col_left]
+        inc esi
+        cmp esi , edi
+        jz next3
+
+        mov esi , [i] ;i
+        mov edi , [ebp + 16]
+        mov ebx, [line_up] ;row 1
+        mov eax , [ebp + 8] ;n
+        xor edx, edx
+        mul ebx
+        add eax, esi
+        mov edx , [edi + 4 * eax] ; element matrix
+        mov edi , [ebp + 12]
+        mov ecx , [cont]
+        xor eax, eax
+        mov al , byte[edi + ecx]
+        add eax, edx
+        mov edi , [ebp + 20]
+        mov [edi + ecx], al ; adunat in sir
+
+        mov eax, [cont]
+        mov ebx, [i]
+        inc eax
+        dec ebx
+        mov [i], ebx
+        mov [cont], eax
+        mov [i], ebx
+        mov ebx , [i]
+        jmp line2
+next3:
+    mov ebx, [cont]
+    mov eax, [np]
+    cmp ebx, eax
+    jge end
+    mov ebx, [line_up]
+    dec ebx
+    jl end
+    mov [j], ebx
+    col2:
+        mov esi , [j]
+        mov edi , [line_down]
+        cmp esi , edi
+        jz next4
+
+        mov esi , [col_left] ;i
+        mov edi , [ebp + 16]
+        mov ebx, [j] ;row 1
+        mov eax , [ebp + 8] ;n
+        xor edx, edx
+        mul ebx
+        add eax, esi
+        mov edx , [edi + 4 * eax] ; element matrix
+        mov edi , [ebp + 12]
+        mov ecx , [cont]
+        xor eax, eax
+        mov al , byte[edi + ecx]
+        add eax, edx
+        mov edi , [ebp + 20]
+        mov [edi + ecx], al ; adunat in sir
+
+        mov eax, [cont]
+        mov ebx, [j]
+        inc eax
+        dec ebx
+        mov [j], ebx
+        mov [cont], eax
+        jmp col2
+
+next4:
+    mov ebx, [cont]
+    mov eax, [np]
+    cmp ebx, eax
+    jge end
+
+    mov eax, [line_down]
+    mov ebx, [line_up]
+    mov ecx, [col_left]
+    mov edx , [col_right]
+    inc eax
+    dec ebx
+    inc ecx
+    dec edx
+    mov [line_down], eax
+    mov [line_up], ebx
+    mov [col_left], ecx
+    mov [col_right], edx
+
+    mov eax , [cont]
+    mov ebx, [np]
+    cmp eax, ebx
+    jl for
+
+end:
+    ;; FREESTYLE ENDS HERE
+    ;; DO NOT MODIFY
+    popa
+    leave
+    ret
+    ;; DO NOT MODIFY

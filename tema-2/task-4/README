@@ -1,0 +1,130 @@
+Toma Mihai Dragos - 312CB
+
+1. 
+    In cadrul acestui task am iterat prin vectorul de charuri plain
+    Imi luam litera , scadeam 'A' (65) din ea si dupa adunam cu cheia
+    Impart noul numar la 26 si imi iau restul din registrul ah si il mut in ah
+    si il pin in noul vector enc_string
+    am observat ca chiar daca trece peste 26, daca impart si iau restu o sa criptez cu cifrul caesar
+2.
+a.      In cadrul acstui am vazut ca cele doua puncte sunt pe ox sau oy
+    asa ca am adunat x, y al primei coordonate si dupa le-am scazut pe urmatoarele in ax
+    dupa am facut modulul lui ,(in caz ca scaderea e negativa) l-am pus in vectorul de rezultate distance
+
+b.  
+    aici am facut cam ca la taskul 1 numai ca am iterat prin vecotrul de puncte si am pus in vectorul de distante
+    pe ecx l-am folosit ca un contor prin acesti vecotri
+    am vazut ca in point o structura are in total 4 octeti , asa ca ma iterat mereu cu adresa + 4*ecx - 4
+    am dat +2, +4, +6 pt ca aici se aflta elementele din strucutra 
+    (puteam sa dau si point.x si point.x dar astea au doi octeti)
+    asta e si la task 1
+    la sfarsti am pus la adresa tot ecx * 4 - 4 pt ca e vector de intrui vectorul meu de distante
+    cam asta e cerinta asta
+c.  la acsta task m-am folosit de esi ca si contor
+    foloses acest registru pt a-l aduna si pt a calcula patratul perfect cu el
+    in edi imi pastrez numarul meu pe care vreau sa il verific daca e patrat perfect
+    esi il adun in sqrt si fac 3 comperuri astfel:
+    mere fac intre edx si eax (esi la patrat si numarul meu)
+        1. daca edi > eax atunci am sarit de numarul meu deci nu e 
+        patrat perfect si pun zero in vectorul sq si ies din loop
+        2. daca edi == eax atunci am gasit numarul meu asa ca pun zero in sq 
+        3 edi < eax  atunci imi incrementez edi si caut 
+        urmatrul numarul patrat perfect pana il gasesc sau trec de el
+    
+3.
+    aici mi-am declarat doua variabil cont_plain si cont_key 
+    cu ajutorul carora voi itera prin vectorii mei de charuri
+
+    l-a inceput mi-am calculat mereu contorul corespunzartor
+    cheii si in cazul in care cuvantul plain e mai mare decat cheia.
+    adica am luat cont_key % key adica fac exact ca incerinta sa ma intorc la inceputl cheii daca ies din key
+
+    fac asta in registrii eax si ebx si salvez restu in edx unde am pus comentarii
+    dupa im tin minte in ebx si in ecx literele corespunzatoare sirurilor mele de caractere
+    scad din litera key (ecx) litera plain (ebx)
+    1. Daca rezultatul este mai mare ca si zero doar adun 'A' si pun rezultatul in stringul enc 
+    2. Daca e mai mic ca si zero atunci sar la labelul negativ 
+    unde ii adun rezulatului 25 si dupa coudl ascii a lui 'A'
+
+    Asta am dedus- o din tabelul dat 
+    dupa doar mai incrementez cele doua contoare si verific sa vad daca se mai respecta conditia
+
+4.
+
+    In cadrul acestui task am vazut ca trebuie sa fac un loop while in care trebuie sa pun 4 loopuri 
+    ca un while cu patru foruri in c 
+    Initial mi-am facut mai multe variabile:
+    cont - un contor general cu care ma ghidez sa vad la ce pozitie sunt 
+    n_sqare- n la patrat
+    line_up - linia de sus a matricei, Initial 0
+    line_down - linia de jos a matrice , Initial n-1
+    col_left - coloana stanga, Initial 0 
+    col_right - coloana dreaptam , Initial n - 1
+    i, j - niste parametrii care ma ajuta sa fac paresare prin matrice
+    am folosit acesti doi parametrii ca sa vad mai bine codul
+
+    formula genereala pt gasire element matrice : 4 * n * linie + 4 * coloana
+    4 -> vine de la int 
+
+line1:
+    la inceput initalizez i cu col_left , adica ma pregatesc sa parcurg matricea din stanga colt pana dreapta colt
+    la inceput de line1 am conditia de terminare a parcurgerii loopi,
+    care e atunci cand ajung la coloana din capat dreapta [col_right]
+
+    dupa in for am luat adresa inceputul matricei in edi si line_up (linia pe care ma aflu acum), in ebx
+    dupa am dedus ca elementul din matricea mea pe care il doresc se afla 
+    la adresa line_up * n * 4 + i * 4 am inmulti cu 4 pt ca e o matrice de int- uri
+    dupa ce am facut inmultirea mi-am stocat elemetnul din matrice in edx
+    dupa , cu ajutorul lui cont pe care l-am explicat mai sus,
+    imi iau elemtnutul din vecotrul plain de charuri in al
+    ii adun cheia aflta in edx si dupa in mut inapoi in sirul meu
+    acest pas cu adunarea la litera din plain l-am realizat in fiecare for , asa ca nu il voi explica
+    la sfarsit am incrementat i ca sa merg pe toata linia si contor ca sa stiu la ce pas na aflu
+next1 are rolul sa ma ajute sa sar la urm for daca nu se ineplineste conditia mea
+
+col1 :
+    la inceput mi-am initializat j cu inputul
+    liniei din colt drapta +1(pt ca acolo m-am oprit la iteratia precedenta)
+
+    dupa am conditia de oprire(verific cu linia de jos mere, 
+    adica parcurg coloana din dreapta pe scurt in acest loop)
+
+    dupa iar imi aflu elementul din matrice folosind formula j *n * 4 + col_right * 4
+    nu o sa mai explic cum am facut inmultirea, am luat elemtnul 
+    din matrice si am adunat la caracterul din plain pt ca ma facut-o mai sus
+    
+    dupa , la sfarsit , am incrementat j meu si contor pt a putea ma duce in jos in drepata matricea
+    eu cobor, in acest momtne , din dreapta sus spre stanga jos, asa ca trb sa scad in j-ul meu
+
+line2:
+    mai intai mi-a initializat i cu col_right - 1 pt ca acolo am ramas in momentul acesta cu parcrugerea matrcii mele
+    am la inceput conditia de iesire din loop, si comapar cu coloana din 
+    stanga dar + 1 pt a nu o include si pe ea (o sa o iau la urm parcuregere fara + 1)
+
+    dupa iar am dedus fomrula pt a aflta elementul din matricea 
+    mea line_down * 4 * n + 1 (aceasata formula este defapt linia * n * 4 + nr_coloane)
+    duap am facut aceasti poveste am luat din matrice, adunat cu caracterul si pus in sirul de rezulatate
+
+    la sfarsit am decrementat i pt ca ma aflu in drepata  jos si vreu sa vin spre stanga in matrice
+    am adunat si contorul
+
+col2:
+    la inceput am initializat line_down - 1 pt ca suntem la ultima parcuregere, adica in stanga jos
+    la inceput iara am compara cu line_up sa vad daca ajunge 
+    la el (am pus un plus unu doarece line_up pe pozitia 0 a fost deja parcurs)
+
+    dupa am vazut ca formula pt a afla elementul din matricea mea este j * n * 4 + col_left 
+    am aflta elemtntul si am facut rezultatul
+    la sfarsit am decrementat j meu pt a putea urca pe linia din stanga matricei
+
+la sfarsit, pt a putea continua parcurgerea in spirala, 
+am adunta la col_left si line_up un unu si din col_right si line_down am scazut
+
+este logic ca am facut acest lucru , dearoce eu vreau sa 
+restrang matricea mea la fiecare iteratie pana ajung in centru
+
+la sfaristul loopuli while am verificat daca cont -ul meu, pe care 
+l-am incerementat la fiecare loop, este egal nu n_square, adica daca am ajuns
+la finalul sirului de n * n din cerinta
+
+daca nu fac iara procedeul de mai sus pana parcurg toata matrice

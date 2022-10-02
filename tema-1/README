@@ -1,0 +1,45 @@
+Toma Mihai Dragos - 312CB
+
+Mai intai mi-am facut o functie alocare_data unde aloc o structura corespunzatoare unui set de date
+Aici imi dau ca parametru linia si incep sa fac parsare prin fiecare cuvant si ii aloc in data tot ce trebuie
+ma folosesc in principal de memcpy ca sa mut informatiile in data si de malloc si realloc
+
+add_last:
+    Aici imi aloc memorie in functie de cat imi trebuie si imi incrementez len care va tine minte numarul de octeti total
+    Adau la final(*arr + *len) cu ajutorul functiei memmove tot ce se afla in headerul strucutrii data curente si dupa tot ce sa aflta in campul data
+
+add_at:
+    imi aloc o alta strucutra head  care are rolul sa imi parseze informatia (pe care o dezaloc la sfarsit)
+    fac asta pt a imi afla len de fiecare data
+    in while fac parsarea cu ajutorul lungime_crt in care imi adun mereu headerul si data din strucutra
+    am un contor care numarul numarul de informatii primite
+    cand contor == index atunci incep sa imi mut in vector tot ce trebuie
+    mai intai realochez tot arr pt a insera elementul dorit
+    dupa mut la adresa curenta din vector + marimea elemt de inserat adresa la care ma aflu acum(efectiv fac loc)
+    iar numarul de elemente l-am dedus ca e len - lungime_crt mereu
+    am pus si o conditie in caz ca lungime_crt imi iese din len total (asa ca adaug la final)
+    am pus if la memcpy ala pt ca ma vazut ca mai unul inutil la final (imi dadea eroare valgrind)
+delete_at:
+    am parsart la fel ca mai sus cu o lungime_crt care mergea pana la max de len
+    cand dau de indexul meu fac memmove pt a muta tot sirul in fata(la lungimea curenta aduc ce el la lungimea crt + distanta elemetnului curent)
+    am vaztu ca numarul de elemente mutate sunt total - element curent sters - ce elemente am parcurs pana acum
+    si lenul descreste cu size-ul elemtenului sters
+    am mai dat si realloc cu noul size pt a avea marimea sirului exacta
+print:
+    efectiv am facut un while si un int parcurgere care merge pana la len(marimea totala in octeti)
+    la fiecare iteratie mai intai scort char ci char dedicatorul
+    dupa sar pozitiile corespunzatoare intului
+    scot dedicatul
+    dupa scad din variabila de parcugere sum(sizezlul bacnotelor toatale)
+    le printez si pe ele doua si dupa la variabila de parcurgere adaug toate informatiile ramase
+    fac asta pana la len maxim
+find:
+    am facut parcurgerea cu while de la insert si cand gasesc indexul apele fucntia de print
+    in loc sa ii dau adresa sirului de inceput ii dau adresa arr plus lungimea pana la element
+    in loc e len max ii dau merimea elementuli de la poz de index   
+    astfel whilelu o sa fac o signrua iteratie(am facut o tiganeasca ca sa nu mai schimb fucntia de printare)
+main:
+    am facut doar parsarea liniilor si am intors codurile de eroare in caz ca nu se aloca bine
+    la exit am dat doar free de arr pt ca am dezalocat tot mai sus
+
+o tema excelenta cu cele mai mentolate manele va pup

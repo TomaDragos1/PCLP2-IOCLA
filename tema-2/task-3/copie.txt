@@ -1,0 +1,109 @@
+matrice:
+    xor esi ,esi 
+    mov esi , [ebp + 28]
+    ;xor ebx , ebx
+    mov bh , byte[esi + ah + 26]
+    jmp return
+
+while:
+    xor eax, eax
+    mov ebx , [ebp + 12]
+    mov esi , [cont]
+    mov al , byte[ebx + esi]
+    push eax
+    mov edi , [cont_key]
+    xor edx, edx
+    xor eax, eax
+    mov eax, edi
+    mov ebx , [ebp + 16]
+    div ebx
+    mov [cont_key], edx
+    mov edx , [ebp + 20]
+    mov eax , [cont_key]
+    mov ah , byte[edx + eax]
+    xor ebx , ebx
+    pop ebx
+    xor ecx , ecx 
+    mov edi, [ebp + 24]
+    sub bl , 'A' ;; D
+    sub ah , 'A' ;; F
+    sub ah , bl
+    jl matrice
+    xor esi, esi
+    mov esi, [ebp + 28]
+    mov bh , byte[esi + ah]
+
+return:
+    mov edi , [cont];
+    mov esi , [ebp + 28]
+    mov [esi + cont], bh
+    mov esi , [cont]
+    mov edi , [cont_key]
+    inc edi
+    mov eax , [ebp + 8]
+    inc esi
+    cmp esi , eax
+    jnz while
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ mov esi , 0
+    mov [cont], esi
+    mov [cont_key], esi
+
+while:
+    xor eax, eax
+    mov ebx , [ebp + 12]
+    mov esi , [cont]
+    xor eax, eax
+    mov al , byte[ebx + esi]
+    ;PRINTF32 `%c\n\x0`, eax
+    push eax
+    mov edi , [cont_key]
+    xor edx, edx
+    xor eax, eax
+    mov eax, edi
+    mov ebx , [ebp + 16]
+    div ebx
+    mov [cont_key], edx
+   ; PRINTF32 `%d\n\x0`, edx
+    mov edi , [ebp + 8]
+    mov edx , [cont]
+    mov eax , [cont_key]
+    ;PRINTF32 `%d\n\x0`, edx
+    xor ebx , ebx
+    pop ebx
+    mov esi , [ebp + 20]
+    xor ecx , ecx
+    mov cl , [esi + eax]
+
+    mov edi , [ebp + 8]
+    mov edx , [cont]
+    mov eax , [cont_key]
+    inc eax
+    mov [cont_key], eax
+    inc edx
+    mov [cont], edx
+    ;PRINTF32 `%d %d %d\n\x0`, edx, edi, eax
+    cmp edi , edx
+    jnz while
